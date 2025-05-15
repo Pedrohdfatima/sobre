@@ -259,3 +259,41 @@ h2 {
         font-size: 2rem;
     }
 }
+
+
+.btn-voltar {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--cor-secundaria);
+    text-decoration: none;
+    border-radius: 8px;
+    background: linear-gradient(45deg, var(--cor-destaque), var(--cor-destaque2));
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.btn-voltar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.1);
+    transition: left 0.4s;
+    z-index: -1;
+}
+
+.btn-voltar:hover::before {
+    left: 0;
+}
+
+.btn-voltar:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
