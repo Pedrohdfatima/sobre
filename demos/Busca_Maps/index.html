@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Busca com Leaflet e Nominatim</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<link rel="stylesheet" href="style.css"> 
+    <style>
+    
+      
+        #map {
+          height: 500px;
+          margin: 20px;
+          border-radius: 15px;
+        }
+      
+        @media (max-width: 600px) {
+          #search-box {
+            flex-direction: column;
+            align-items: stretch;
+          }
+        
+      
+        }
+      </style>
+</head>
+<body>
+<h1> API Locais </h1>
+  <div id="search-box">
+    <input type="text" id="search" placeholder="Digite um local" size="40" />
+    <button onclick="buscarLocal()">Buscar</button>
+  </div>
+  <div id="map"></div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  </script>
+
+  <script>
+    // Inicializa o mapa
+    const map = L.map('map').setView([-23.5505, -46.6333], 13); // São Paulo como exemplo
+
+    // Adiciona o mapa base
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    let marcador;
+
+    function buscarLocal() {
+      const termo = document.getElementById('search').value;
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(termo)}`;
+
+      fetch(url, { headers: { 'Accept-Language': 'pt-BR' } })
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.length > 0) {
+            const local = data[0];
+            const lat = local.lat;
+            const lon = local.lon;
+
+            map.setView([lat, lon], 14);
+
+            if (marcador) {
+              map.removeLayer(marcador);
+            }
+
+            marcador = L.marker([lat, lon])
+              .addTo(map)
+              .bindPopup(`<strong>${local.display_name}</strong>`)
+              .openPopup();
+          } else {
+            alert('Local não encontrado!');
+          }
+        })
+        .catch(error => {
+          console.error('Erro na busca:', error);
+          alert('Erro ao buscar local');
+        });
+    }
+  </script>
+</body>
+</html>

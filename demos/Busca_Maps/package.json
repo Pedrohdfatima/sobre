@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@owsas/nominatim-js": "^1.0.1",
+    "leaflet": "^1.9.4"
+  }
+}
